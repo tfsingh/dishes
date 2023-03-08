@@ -1,1 +1,0 @@
-# uwimg-final-project
