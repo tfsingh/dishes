@@ -16,8 +16,9 @@ def dish(face_names, objFrame):
         # if object frame is still different, then trigger a text that blames all face names for leaving a dish in the sink
     if face_names:
         print(cv2.absdiff(objFrame, objFrames[-1]).sum())
-
-    return True
+        return True
+    
+    return False
 
     
 
@@ -39,7 +40,7 @@ while True:
     cv2.imshow('Object', objFrame)
     if (dish(face_names, objFrame)):
         # push notification to twilio
-        update.send_message()
+        update.send_message(face_names)
 
         # update backend
         update.update_backend(face_names)

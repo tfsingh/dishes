@@ -12,12 +12,14 @@ twilio_recipient = os.environ['TWILIO_RECEPIENT']
 
 client = Client(account_sid, auth_token)
 
-def send_message():
+def send_message(face_names):
+    content = " ".join(str(name) for name in face_names) + " added a dish to the sink."
+
     message = client.messages \
                     .create(
-                        body="Join Earth's mightiest heroes. Like Kevin Bacon.",
+                        body=content,
                         from_= twilio_sender,
-                        to= twilio_sender
+                        to= twilio_recipient
                     )
 
 
