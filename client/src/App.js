@@ -1,37 +1,17 @@
 import "./App.css";
-import { useEffect, useState } from "react";
-import Chart from "./Chart";
-
-// import API_ENDPOINT from .env
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import Summary from "./pages/Summary";
 
 function App() {
-  const api_endpoint = process.env.REACT_APP_API_ENDPOINT;
-  const [data, setData] = useState();
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await callApi();
-      setData(data);
-    }
-    fetchData();
-  }, []);
-
-  async function callApi() {
-    const response = await fetch(api_endpoint, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
-    return data;
-  }
-
   return (
-    <div>
-      <div className="max-w-xl">{data && <Chart data={data} />}</div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<HomePage />} />
+        <Route path="/summary" element={<Summary />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
