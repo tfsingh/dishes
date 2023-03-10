@@ -1,7 +1,6 @@
 import os
 import face_recognition
 
-#create an image and an encoding for each file in the faces folder
 def create_encodings():
     encodings = []
     for file in os.listdir("faces"):
@@ -10,7 +9,6 @@ def create_encodings():
         encodings.append(encoding)
     return encodings
 
-#return an array of names of people in the faces folder
 def create_names():
     names = []
     for file in os.listdir("faces"):

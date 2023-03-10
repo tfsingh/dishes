@@ -17,7 +17,7 @@ def dish(face_names, objFrame):
     if face_names:
         print(cv2.absdiff(objFrame, objFrames[-1]).sum())
 
-    return False
+    return True
 
     
 
@@ -43,6 +43,8 @@ while True:
 
         # update backend
         update.update_backend(face_names)
+
+        break
     
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):
