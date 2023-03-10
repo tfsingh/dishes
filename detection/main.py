@@ -1,7 +1,7 @@
 import face_recognition
 import cv2
 import update
-import detection
+import detection.func as func
 
 video_capture = cv2.VideoCapture(1)
 object_capture = cv2.VideoCapture(0)
@@ -20,11 +20,11 @@ while True:
     face_names = []
 
     
-    detection.match_faces(face_encodings, face_locations, face_names, faceFrame)
+    func.match_faces(face_encodings, face_locations, face_names, faceFrame)
 
     cv2.imshow('Video', faceFrame)    
     cv2.imshow('Object', objFrame)
-    if (detection.dish(face_names, objFrame, objFrames[-1])):
+    if (func.dish(face_names, objFrame, objFrames[-1])):
         # push notification to twilio
         #update.send_message(face_names)
 
