@@ -1,10 +1,10 @@
 import numpy as np
 import cv2
 import face_recognition
-import encodings
+import generate_encodings
 
-known_face_encodings = encodings.create_encodings()
-known_face_names = encodings.create_names()
+known_face_encodings = generate_encodings.create_encodings()
+known_face_names = generate_encodings.create_names()
 
 def draw_boxes(face_locations, face_names, faceFrame):
     for (top, right, bottom, left), name in zip(face_locations, face_names):
@@ -18,7 +18,7 @@ def draw_boxes(face_locations, face_names, faceFrame):
 
         font = cv2.FONT_HERSHEY_DUPLEX
         
-        cv2.putText(faceFrame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+        cv2.putText(faceFrame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)   
 
 def match_faces(face_encodings, face_locations, face_names, faceFrame):
     small_frame = cv2.resize(faceFrame, (0, 0), fx=0.25, fy=0.25)
@@ -36,3 +36,6 @@ def match_faces(face_encodings, face_locations, face_names, faceFrame):
             name = known_face_names[best_match_index]
 
         face_names.append(name)
+
+    draw_boxes(face_locations, face_names, faceFrame)
+  

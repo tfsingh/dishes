@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 import requests
 from twilio.rest import Client
 
+load_dotenv()
+
 account_sid = os.environ['TWILIO_SID']
 auth_token = os.environ['TWILIO_TOKEN']
 twilio_sender = os.environ['TWILIO_SENDER']
@@ -19,4 +21,4 @@ def send_message():
                     )
 
 def update_backend(face_names):
-    return
+    return False

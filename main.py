@@ -1,11 +1,10 @@
 import face_recognition
 import cv2
-import numpy as np
 import update
 import face
 
-video_capture = cv2.VideoCapture(0)
-object_capture = cv2.VideoCapture(1)
+video_capture = cv2.VideoCapture(1)
+object_capture = cv2.VideoCapture(0)
 
 objFrames = [object_capture.read()[1]]
 
@@ -18,9 +17,9 @@ def dish(face_names, objFrame):
     if face_names:
         print(cv2.absdiff(objFrame, objFrames[-1]).sum())
 
-def display_images(faceFrame, objFrame):
-    cv2.imshow('Video', faceFrame)    
-    cv2.imshow('Object', objFrame)
+    return False
+
+    
 
 face_locations = []
 face_encodings = []
@@ -33,20 +32,17 @@ while True:
 
     face_names = []
 
-    if process_this_frame:
-        face.match_faces(face_encodings, face_locations, face_names, faceFrame)
-    face.draw_boxes(face_locations, face_names, faceFrame)
-
-    display_images(faceFrame, objFrame)
     
-    if (dish()):
+    face.match_faces(face_encodings, face_locations, face_names, faceFrame)
+
+    cv2.imshow('Video', faceFrame)    
+    cv2.imshow('Object', objFrame)
+    if (dish(face_names, objFrame)):
         # push notification to twilio
         update.send_message()
 
         # update backend
         update.update_backend(face_names)
-
-    process_this_frame = not process_this_frame
     
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):
