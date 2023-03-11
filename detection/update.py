@@ -10,7 +10,7 @@ auth_token = os.environ['TWILIO_TOKEN']
 twilio_sender = os.environ['TWILIO_SENDER']
 twilio_recipient = os.environ['TWILIO_RECEPIENT']
 
-client = Client(account_sid, auth_token)
+client = Client(ccount_sid, auth_token)
 
 def send_message(face_names):
     content = " ".join(str(name) for name in face_names) + " added a dish to the sink."

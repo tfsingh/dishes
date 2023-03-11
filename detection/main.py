@@ -27,6 +27,7 @@ while True:
     cv2.imshow('Video', faceFrame)    
     cv2.imshow('Object', objFrame)
     
+    
     if (func.dish(face_names, objFrame, objFrames[-1], similarity_score)):
 
         time.sleep(10)
@@ -35,11 +36,12 @@ while True:
             update.send_message(face_names)
 
             update.update_backend(face_names)
-            
+
             objFrames.append(object_capture.read()[1])
             similarity_score = func.newSimilarity(objFrames[-1], object_capture)
 
     
+
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
