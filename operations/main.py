@@ -24,6 +24,7 @@ while True:
 
     face_names = []
 
+    # fill face_names with the faces detected
     detection.match_faces(face_names, face_frame)
 
     # displays the video frames
