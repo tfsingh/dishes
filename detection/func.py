@@ -2,17 +2,32 @@ import numpy as np
 import cv2
 import face_recognition
 import generate_encodings
+from skimage.metrics import structural_similarity
+
 
 known_face_encodings = generate_encodings.create_encodings()
 known_face_names = generate_encodings.create_names()
 
-def dish(face_names, objFrame, prevFrame):
+def getScore(frame1, frame2):
+    before_gray = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+    after_gray = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+    (score, diff) = structural_similarity(before_gray, after_gray, full=True)
+    return score * 100
+
+def checkDiff(frame1, frame2, image_similarity):
+    before_gray = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+    after_gray = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+
+    # Compute SSIM between the two images
+    (score, diff) = structural_similarity(before_gray, after_gray, full=True)
+    print("Image Similarity: {:.4f}%".format(score * 100))
+    return np.abs(score*100 - image_similarity) > 5
+
+def dish(face_names, objFrame, prevFrame, similarity_score):
     
     #if there is a face in the frame and there is a significant difference between the current frame and the previous frame, then return true.
-    if face_names and np.sum(np.abs(objFrame - prevFrame)) > 1000000:
-        return True
-       
-    return False
+    return face_names and checkDiff(objFrame, prevFrame, similarity_score)
+    
 
 def draw_boxes(face_locations, face_names, faceFrame):
     for (top, right, bottom, left), name in zip(face_locations, face_names):
@@ -45,5 +60,5 @@ def match_faces(face_encodings, face_locations, face_names, faceFrame):
 
         face_names.append(name)
 
-    draw_boxes(face_locations, face_names, faceFrame)
+    #draw_boxes(face_locations, face_names, faceFrame)
   
