@@ -4,53 +4,50 @@ import update
 import detection
 import time
 
+# defines variables for taking in video from webcams
 video_capture = cv2.VideoCapture(1)
 object_capture = cv2.VideoCapture(0)
 
-objFrames = [object_capture.read()[1]]
+# stores the previous (relevant) dish frames
+obj_frames = [object_capture.read()[1]]
 
-face_locations = []
-face_encodings = []
-face_names = []
-process_this_frame = True
+# time to wait before checking if a dish has been added
+wait_time = 10
 
-similarity_score = detection.newSimilarity(objFrames[-1], object_capture)
+# defines the resting similarity score
+similarity_score = detection.newSimilarity(obj_frames[-1], object_capture)
 
 while True:
-    ret, faceFrame = video_capture.read()
-    ob, objFrame = object_capture.read()
+    # takes a new image from each webcam
+    ret, face_frame = video_capture.read()
+    ob, obj_frame = object_capture.read()
 
     face_names = []
 
-    detection.match_faces(face_encodings, face_locations, face_names, faceFrame)
+    detection.match_faces(face_names, face_frame)
 
-    cv2.imshow('Video', faceFrame)    
-    cv2.imshow('Object', objFrame)
+    # displays the video frames
+    cv2.imshow('Video', face_frame)    
+    cv2.imshow('Object', obj_frame)
     
-    
-    if (detection.dish(face_names, objFrame, objFrames[-1], similarity_score)):
+    # if a face is detected, check if the dish has changed
+    if (detection.dish(face_names, obj_frame, obj_frames[-1], similarity_score)):
 
-        time.sleep(10)
+        time.sleep(wait_time)
 
-        if detection.checkDiff(object_capture.read()[1], objFrames[-1], similarity_score):
+        # if there is still a dish after the designated wait time, update the backend and send a message
+        if detection.checkDiff(object_capture.read()[1], obj_frames[-1], similarity_score):
+
             update.send_message(face_names)
-
             update.update_backend(face_names)
 
-            objFrames.append(object_capture.read()[1])
-            similarity_score = detection.newSimilarity(objFrames[-1], object_capture)
+            # update the previous dish frames
+            obj_frames.append(object_capture.read()[1])
+            similarity_score = detection.newSimilarity(obj_frames[-1], object_capture)
 
-    
-
-    # Hit 'q' on the keyboard to quit!
+    # quits on q
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-
-
-
-
-
-# Release handle to the webcam
 video_capture.release()
 cv2.destroyAllWindows()

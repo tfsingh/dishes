@@ -4,43 +4,50 @@ import face_recognition
 import generate_encodings
 from skimage.metrics import structural_similarity
 
+# gets encodings and names from generate_encodings.py
 known_face_encodings = generate_encodings.create_encodings()
 known_face_names = generate_encodings.create_names()
 
-def getScore(frame1, frame2):
-    before_gray = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
-    after_gray = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+# gets the similarity score of two frames
+def getScore(frame_1, frame_2):
+    before_gray = cv2.cvtColor(frame_1, cv2.COLOR_BGR2GRAY)
+    after_gray = cv2.cvtColor(frame_2, cv2.COLOR_BGR2GRAY)
     score, _ = structural_similarity(before_gray, after_gray, full=True)
     return score * 100
 
-def checkDiff(frame1, frame2, image_similarity):
-    score = getScore(frame1, frame2)
+# returns true if two dish frames are significantly different
+def checkDiff(frame_1, frame_2, image_similarity):
+    score = getScore(frame_1, frame_2)
     return np.abs(score - image_similarity) > 5
 
-def dish(face_names, objFrame, prevFrame, similarity_score):
-    return face_names and checkDiff(objFrame, prevFrame, similarity_score)
+# returns true if a face is detected and the dish has changed
+def dish(face_names, obj_frame, prev_frame, similarity_score):
+    return face_names and checkDiff(obj_frame, prev_frame, similarity_score)
 
-def newSimilarity(prevFrame, object_capture):
+# generates a new similarity score for the current dish frame
+def newSimilarity(prev_frame, object_capture):
     for i in range(10):
         object_capture.read()[1]
-    return getScore(prevFrame, object_capture.read()[1])
+    return getScore(prev_frame, object_capture.read()[1])
     
-def draw_boxes(face_locations, face_names, faceFrame):
+# draws boxes around faces and labels them
+def draw_boxes(face_locations, face_names, face_frame):
     for (top, right, bottom, left), name in zip(face_locations, face_names):
         top *= 4
         right *= 4
         bottom *= 4
         left *= 4
 
-        cv2.rectangle(faceFrame, (left, top), (right, bottom), (0, 0, 255), 2)
-        cv2.rectangle(faceFrame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+        cv2.rectangle(face_frame, (left, top), (right, bottom), (0, 0, 255), 2)
+        cv2.rectangle(face_frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
 
         font = cv2.FONT_HERSHEY_DUPLEX
         
-        cv2.putText(faceFrame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)   
+        cv2.putText(face_frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)   
 
-def match_faces(face_encodings, face_locations, face_names, faceFrame):
-    small_frame = cv2.resize(faceFrame, (0, 0), fx=0.25, fy=0.25)
+# matches faces to known faces
+def match_faces(face_names, face_frame):
+    small_frame = cv2.resize(face_frame, (0, 0), fx=0.25, fy=0.25)
     rgb_small_frame = small_frame[:, :, ::-1]
     
     face_locations = face_recognition.face_locations(rgb_small_frame)

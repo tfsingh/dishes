@@ -3,15 +3,18 @@ from dotenv import load_dotenv
 import requests
 from twilio.rest import Client
 
+# load environment variables
 load_dotenv()
-
 account_sid = os.environ['TWILIO_SID']
 auth_token = os.environ['TWILIO_TOKEN']
 twilio_sender = os.environ['TWILIO_SENDER']
 twilio_recipient = os.environ['TWILIO_RECEPIENT']
+endpoint = os.environ['API_ENDPOINT']
 
+# initialize Twilio client
 client = Client(account_sid, auth_token)
 
+# sends a message to the recipient
 def send_message(face_names):
     content = " ".join(str(name) for name in face_names) + " added a dish to the sink."
 
@@ -22,9 +25,7 @@ def send_message(face_names):
                         to= twilio_recipient
                     )
 
-
-endpoint = os.environ['API_ENDPOINT']
-
+# increments the count of the dish for each person in the face_names list
 def update_backend(face_names):
     response = requests.get(endpoint)
     if response.status_code == 200:
