@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Chart from "../Chart";
+import NavBar from "./NavBar";
 // import API_ENDPOINT from .env
 
 function HomePage() {
@@ -15,7 +16,6 @@ function HomePage() {
   }, []);
 
   async function callApi() {
-    /*
     const response = await fetch(api_endpoint, {
       method: "GET",
       headers: {
@@ -24,46 +24,7 @@ function HomePage() {
       },
     });
     const data = await response.json();
-*/
-
-    return [
-      {
-        name: "adrian",
-        count: "1",
-      },
-      {
-        name: "jordan",
-        count: "1",
-      },
-      {
-        name: "atri",
-        count: "2",
-      },
-      {
-        name: "tej",
-        count: "2",
-      },
-      {
-        name: "jonathan",
-        count: "3",
-      },
-      {
-        name: "adrien",
-        count: "4",
-      },
-      {
-        name: "sammy",
-        count: "4",
-      },
-      {
-        name: "ian",
-        count: "5",
-      },
-      {
-        name: "julian",
-        count: "5",
-      },
-    ];
+    return data;
   }
 
   return (
@@ -73,29 +34,31 @@ function HomePage() {
           <div className="max-w-xl">{data && <Chart data={data} />}</div>
           <div className="relative left-11 max-w-xl">
             <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
+              Renowned author, historian, and theologian G.K. Chesterton once
+              remarked, "Men did not love Rome because she was great. She was
+              great because they had loved her." My fellow residents and I love
+              our little home on Ravenna Blvd, for we wish for it to be as
+              glorious as Rome once was. As victory is often the cause of the
+              defeat of victors, I make it a point to extinguish anything that
+              might endanger the sanctity of these precious grounds. I conducted
+              a thorough analysis — I looked to the Germanic Tribes, but alas, I
+              found them to pose no threat.
+            </p>
+            <br></br>
+            <p>
+              Indeed, the greatest risk to our well-being lay within our own
+              ranks! Our housemates would leave dishes in the sink for weeks on
+              end, enabling the proliferation of maleficent bacteria whose
+              presence sullied these sacred grounds. However, I have been
+              studying. Armed with the ancient secrets of computer vision, I set
+              out on a course not just to detect who left the dishes in the
+              sink, but also to ensure the prosperity of our great homestead for
+              millennia to come!
             </p>
           </div>
         </div>
       </div>
-      <div className="absolute top-10 right-12">
-        <a>home</a>
-        <br />
-        <a href="/summary">summary</a>
-        <br />
-        <a>video</a>
-        <br />
-        <a>other</a>
-      </div>
+      <NavBar />
     </div>
   );
 }
