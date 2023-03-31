@@ -1,3 +1,3 @@
-# uwimg-final-project
+# dishes
 
 Who left the dishes in the sink?
